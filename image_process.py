@@ -3,15 +3,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-filename='ML-Dataset#2/M1_F1.3_0403.JPG'
-img = cv2.imread(filename)
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-clone = img.copy()
+# filename='ML-Dataset#2/M1_F1.3_0403.JPG'
+# img = cv2.imread(filename)
+# img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-def show(img):
-    cv2.resize(img,(500,500))
-    cv2.imshow("frame",img)
-    cv2.waitKey(0)
+# def show(img):
+#     cv2.resize(img,(500,500))
+#     cv2.imshow("frame",img)
+#     cv2.waitKey(0)
 
 
 def morphology(img):
@@ -35,8 +34,8 @@ def threshold(img):
     # show(mask)
     return mask
 
-thresh = threshold(img)         
-cv2.imwrite("thresh.jpeg",thresh)
+# thresh = threshold(img)         
+# cv2.imwrite("thresh.jpeg",thresh)
 
 '''
 Finding Lines
@@ -49,9 +48,9 @@ def find_contours(img):
 
     return new_img, contours
 
-img, lines = find_contours(thresh)
-cv2.imwrite("contours.jpeg",img)
-print("Total Contours detected: ",len(lines))
+# img, lines = find_contours(thresh)
+# cv2.imwrite("contours.jpeg",img)
+# print("Total Contours detected: ",len(lines))
 
 def extra_contour_elimination(lines):
     '''
@@ -75,8 +74,8 @@ def extra_contour_elimination(lines):
     
     return concave
 
-final_lines = extra_contour_elimination(lines) 
-print("Number of contours after elimination: ",len(final_lines))
+# final_lines = extra_contour_elimination(lines) 
+# print("Number of contours after elimination: ",len(final_lines))
 # print(final_lines)
 
 '''
@@ -94,15 +93,15 @@ def closest_node(node, nodes):
     index, = np.where(dist_2==min_dist)
     return min_dist,index[0]
 
-def req_contour(final_lines):
+def req_contour(final_lines,x,y):
     distances=[]
     indexes=[]
     for line in final_lines:
-        dist,index=closest_node([704,656],line)
+        dist,index=closest_node([x,y],line)
         indexes.append(index)
         distances.append(dist)
 
-    print(min(distances))
+    # print(min(distances))
     # print(distances)
     line=distances.index(min(distances))
     contour=indexes[line]
@@ -111,9 +110,10 @@ def req_contour(final_lines):
     required_contour = final_lines[line]
     return required_contour, min(distances)
 
-required_contour, dist = req_contour(final_lines)
+# required_contour, dist = req_contour(final_lines,704,656)
+# print("req", required_contour)
 
-def crop_contour(required_contour):
+def crop_contour(required_contour,thresh):
     
     rect = cv2.minAreaRect(required_contour)
     box = cv2.boxPoints(rect)
@@ -152,4 +152,4 @@ def crop_contour(required_contour):
     # cv2.imwrite("req.png",croppedRotated)
     return croppedRotated
 
-cv2.imwrite("req.jpeg",crop_contour(required_contour))
+# cv2.imwrite("req.jpeg",crop_contour(required_contour))

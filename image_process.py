@@ -94,55 +94,62 @@ def closest_node(node, nodes):
     index, = np.where(dist_2==min_dist)
     return min_dist,index[0]
 
-distances=[]
-indexes=[]
-for line in final_lines:
-    dist,index=closest_node([704,656],line)
-    indexes.append(index)
-    distances.append(dist)
+def req_contour(final_lines):
+    distances=[]
+    indexes=[]
+    for line in final_lines:
+        dist,index=closest_node([704,656],line)
+        indexes.append(index)
+        distances.append(dist)
 
-print(min(distances))
-# print(distances)
-line=distances.index(min(distances))
-contour=indexes[line]
-print(final_lines[line][contour])
+    print(min(distances))
+    # print(distances)
+    line=distances.index(min(distances))
+    contour=indexes[line]
+    # print(final_lines[line][contour])
 
-required_contour = final_lines[line]
-x=required_contour[:,0][:,0]
-y=required_contour[:,0][:,1]
+    required_contour = final_lines[line]
+    return required_contour, min(distances)
 
-rect = cv2.minAreaRect(required_contour)
-box = cv2.boxPoints(rect)
-box = np.int0(box)
-# cv2.drawContours(clone,[box],0,(0,0,255),2)
+required_contour, dist = req_contour(final_lines)
 
-# new_img = clone[y:y+h,x:x+h]
-# print(new_img)
+def crop_contour(required_contour):
+    
+    rect = cv2.minAreaRect(required_contour)
+    box = cv2.boxPoints(rect)
+    box = np.int0(box)
+    # cv2.drawContours(clone,[box],0,(0,0,255),2)
 
-W = rect[1][0]
-H = rect[1][1]
+    # new_img = clone[y:y+h,x:x+h]
+    # print(new_img)
 
-Xs = [i[0] for i in box]
-Ys = [i[1] for i in box]
-x1 = min(Xs)
-x2 = max(Xs)
-y1 = min(Ys)
-y2 = max(Ys)
+    W = rect[1][0]
+    H = rect[1][1]
 
-angle = rect[2]
-if angle < -45:
-    angle += 90
+    Xs = [i[0] for i in box]
+    Ys = [i[1] for i in box]
+    x1 = min(Xs)
+    x2 = max(Xs)
+    y1 = min(Ys)
+    y2 = max(Ys)
 
-# Center of rectangle in source image
-center = ((x1+x2)/2,(y1+y2)/2)
-# Size of the upright rectangle bounding the rotated rectangle
-size = (x2-x1, y2-y1)
-M = cv2.getRotationMatrix2D((size[0]/2, size[1]/2), angle, 1.0)
-# Cropped upright rectangle
-cropped = cv2.getRectSubPix(thresh, size, center)
-cropped = cv2.warpAffine(cropped, M, size)
-croppedW = H if H > W else W
-croppedH = H if H < W else W
-# Final cropped & rotated rectangle
-croppedRotated = cv2.getRectSubPix(cropped, (int(croppedW),int(croppedH)), (size[0]/2, size[1]/2))
-cv2.imwrite("req.png",croppedRotated)
+    angle = rect[2]
+    if angle < -45:
+        angle += 90
+
+    # Center of rectangle in source image
+    center = ((x1+x2)/2,(y1+y2)/2)
+    # Size of the upright rectangle bounding the rotated rectangle
+    size = (x2-x1, y2-y1)
+    M = cv2.getRotationMatrix2D((size[0]/2, size[1]/2), angle, 1.0)
+    # Cropped upright rectangle
+    cropped = cv2.getRectSubPix(thresh, size, center)
+    cropped = cv2.warpAffine(cropped, M, size)
+    croppedW = H if H > W else W
+    croppedH = H if H < W else W
+    # Final cropped & rotated rectangle
+    croppedRotated = cv2.getRectSubPix(cropped, (int(croppedW),int(croppedH)), (size[0]/2, size[1]/2))
+    # cv2.imwrite("req.png",croppedRotated)
+    return croppedRotated
+
+cv2.imwrite("req2.png",crop_contour(required_contour))

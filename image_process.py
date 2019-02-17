@@ -56,13 +56,38 @@ thresh = cv2.bitwise_and(mask, d_mask)          #Mask to get minimum  exact whit
 Finding Lines
 '''
 
-def findLines(img):
+def find_contours(img):
     new_img, contours, h = cv2.findContours(
         img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
     )
 
     return new_img, contours
 
-img, lines = extract_contours(thresh)
+img, lines = find_contours(thresh)
 cv2.imwrite("contours.png",img)
-print(len(lines))
+print("Total Contours detected: ",len(lines))
+
+def extra_contour_elimination(lines):
+    '''
+    Elimination via contour area method
+    '''
+    contours=[]
+    for line in lines:
+        a = cv2.contourArea(line)
+        if a>0 and a<=975:          # 65*15=975cm**2 (approximated for pixel)
+            contours.append(line)
+
+    '''
+    Elimination via shape of L, which is concave
+    '''
+    concave = []
+    for line in contours:
+        epsilon = 0.1*cv2.arcLength(line,True)
+        approx = cv2.approxPolyDP(line,epsilon,True)
+        if not cv2.isContourConvex(approx):
+            concave.append(line)
+    
+    return concave
+
+final_lines = extra_contour_elimination(lines) 
+print("Number of contours after elimincation: ",len(final_lines))

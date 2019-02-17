@@ -50,4 +50,19 @@ d_mask = morphology(d_mask)
 # show(d_mask)
 
 thresh = cv2.bitwise_and(mask, d_mask)          #Mask to get minimum  exact white lines
-cv2.imwrite("thresh.png",thresh)
+# cv2.imwrite("thresh.png",thresh)
+
+'''
+Finding Lines
+'''
+
+def findLines(img):
+    new_img, contours, h = cv2.findContours(
+        img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+    )
+
+    return new_img, contours
+
+img, lines = extract_contours(thresh)
+cv2.imwrite("contours.png",img)
+print(len(lines))

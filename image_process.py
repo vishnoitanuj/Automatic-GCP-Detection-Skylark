@@ -17,6 +17,20 @@ def threshold(img,lower_thresh,upper_thresh):
     mask = cv2.inRange(img,low,high)
     return mask
 
+def differntial_rgb(img):
+    blank_rgb = np.zeros(img.shape, np.uint8)
+    b = np.array(img[:,:,0], np.int)
+    g = np.array(img[:,:,1], np.int)
+    r = np.array(img[:,:,2], np.int)
+    blank_rgb[:,:,0] = np.absolute(np.subtract(b,r))
+    blank_rgb[:,:,1] = np.absolute(np.subtract(g,b))
+    blank_rgb[:,:,2] = np.absolute(np.subtract(r,g))
+    low = np.array([0,0,0])
+    high = np.array([30,30,30])
+    mask = cv2.inRange(blank_rgb, low, high)
+    return mask
+
+
 def morphology(img):
     '''
     Dilation: Enlarges bright, white areas by adding pixels
@@ -28,5 +42,9 @@ def morphology(img):
     return opening
 
 mask = threshold(img,200,255)
-mask = morphology(img)
-show(mask)
+mask = morphology(mask)
+# show(mask)
+
+d_mask = differntial_rgb(img)
+d_mask = morphology(d_mask)
+show(d_mask)

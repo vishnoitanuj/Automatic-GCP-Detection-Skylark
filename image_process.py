@@ -36,7 +36,7 @@ def threshold(img):
     return mask
 
 thresh = threshold(img)         
-cv2.imwrite("thresh.png",thresh)
+cv2.imwrite("thresh.jpeg",thresh)
 
 '''
 Finding Lines
@@ -50,7 +50,7 @@ def find_contours(img):
     return new_img, contours
 
 img, lines = find_contours(thresh)
-cv2.imwrite("contours.png",img)
+cv2.imwrite("contours.jpeg",img)
 print("Total Contours detected: ",len(lines))
 
 def extra_contour_elimination(lines):
@@ -152,4 +152,4 @@ def crop_contour(required_contour):
     # cv2.imwrite("req.png",croppedRotated)
     return croppedRotated
 
-cv2.imwrite("req2.png",crop_contour(required_contour))
+cv2.imwrite("req.jpeg",crop_contour(required_contour))

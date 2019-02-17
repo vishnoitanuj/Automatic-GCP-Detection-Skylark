@@ -1,9 +1,11 @@
 from image_process import (
+    show,
     threshold,
-    differntial_rgb,
     morphology,
     find_contours,
-    extra_contour_elimination
+    extra_contour_elimination,
+    closest_node,
+    crop_contour,
 )
 
 import cv2

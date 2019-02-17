@@ -11,25 +11,6 @@ def show(img):
     cv2.imshow("frame",img)
     cv2.waitKey(0)
 
-def threshold(img,lower_thresh,upper_thresh):
-    low = np.array([lower_thresh,lower_thresh,lower_thresh])
-    high = np.array([upper_thresh,upper_thresh,upper_thresh])
-    mask = cv2.inRange(img,low,high)
-    return mask
-
-def differntial_rgb(img):
-    blank_rgb = np.zeros(img.shape, np.uint8)
-    b = np.array(img[:,:,0], np.int)
-    g = np.array(img[:,:,1], np.int)
-    r = np.array(img[:,:,2], np.int)
-    blank_rgb[:,:,0] = np.absolute(np.subtract(b,r))
-    blank_rgb[:,:,1] = np.absolute(np.subtract(g,b))
-    blank_rgb[:,:,2] = np.absolute(np.subtract(r,g))
-    low = np.array([0,0,0])
-    high = np.array([30,30,30])
-    mask = cv2.inRange(blank_rgb, low, high)
-    return mask
-
 
 def morphology(img):
     '''
@@ -41,16 +22,15 @@ def morphology(img):
     opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN,kernel) #Useful in noise reduction (Erosion followed by dilation)
     return opening
 
-mask = threshold(img,200,255)
-mask = morphology(mask)
-# show(mask)
+def threshold(img):
+    gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
+    ret,mask = cv2.threshold(gray,200,255,0)        #Mask to get minimum  exact white lines
+    mask = morphology(mask)
+    # show(mask)
+    return mask
 
-d_mask = differntial_rgb(img)
-d_mask = morphology(d_mask)
-# show(d_mask)
-
-thresh = cv2.bitwise_and(mask, d_mask)          #Mask to get minimum  exact white lines
-# cv2.imwrite("thresh.png",thresh)
+thresh = threshold(img)         
+cv2.imwrite("thresh.png",thresh)
 
 '''
 Finding Lines
@@ -82,7 +62,7 @@ def extra_contour_elimination(lines):
     '''
     concave = []
     for line in contours:
-        epsilon = 0.1*cv2.arcLength(line,True)
+        epsilon = 0.01*cv2.arcLength(line,True)
         approx = cv2.approxPolyDP(line,epsilon,True)
         if not cv2.isContourConvex(approx):
             concave.append(line)
@@ -91,3 +71,32 @@ def extra_contour_elimination(lines):
 
 final_lines = extra_contour_elimination(lines) 
 print("Number of contours after elimincation: ",len(final_lines))
+# print(final_lines)
+
+'''
+Testing for dataset
+'''
+
+
+def closest_node(node, nodes):
+    nodes = np.asarray(nodes)
+    dist_2 = []
+    for i in range(len(nodes)):
+        dist_2.append(np.linalg.norm(nodes[i]-node))
+    dist_2 = np.asarray(dist_2)
+    min_dist = np.amin(dist_2)
+    index, = np.where(dist_2==min_dist)
+    return min_dist,index[0]
+
+distances=[]
+indexes=[]
+for line in final_lines:
+    dist,index=closest_node([721,252],line)
+    indexes.append(index)
+    distances.append(dist)
+
+print(min(distances))
+# print(distances)
+line=distances.index(min(distances))
+contour=indexes[line]
+print(final_lines[line][contour])

@@ -47,4 +47,7 @@ mask = morphology(mask)
 
 d_mask = differntial_rgb(img)
 d_mask = morphology(d_mask)
-show(d_mask)
+# show(d_mask)
+
+thresh = cv2.bitwise_and(mask, d_mask)          #Mask to get minimum  exact white lines
+cv2.imwrite("thresh.png",thresh)

@@ -3,14 +3,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# filename='ML-Dataset#2/M1_F1.3_0403.JPG'
+# filename='ML-Dataset#1/DJI_0096.JPG'
 # img = cv2.imread(filename)
 # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+# clone = img.copy()
 
-# def show(img):
-#     cv2.resize(img,(500,500))
-#     cv2.imshow("frame",img)
-#     cv2.waitKey(0)
+def show(img):
+    cv2.resize(img,(500,500))
+    cv2.imshow("frame",img)
+    cv2.waitKey(0)
 
 
 def morphology(img):
@@ -29,7 +30,7 @@ def threshold(img):
     Range is 200, 255 (hard-coded), can be altered according to dataset
     '''
     gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
-    ret,mask = cv2.threshold(gray,200,255,0)        
+    ret,mask = cv2.threshold(gray,240,255,0)        
     mask = morphology(mask)
     # show(mask)
     return mask
@@ -111,7 +112,7 @@ def req_contour(final_lines,x,y):
     rejected_contours = np.delete(final_lines,line)
     return required_contour, min(distances), rejected_contours
 
-# required_contour, dist = req_contour(final_lines,704,656)
+# required_contour, dist, rejected_contours = req_contour(final_lines,2483,2370)
 # print("req", required_contour)
 
 def crop_contour(required_contour,thresh):
@@ -149,8 +150,17 @@ def crop_contour(required_contour,thresh):
     croppedW = H if H > W else W
     croppedH = H if H < W else W
     # Final cropped & rotated rectangle
-    croppedRotated = cv2.getRectSubPix(cropped, (int(croppedW),int(croppedH)), (size[0]/2, size[1]/2))
+    croppedRotated = cv2.getRectSubPix(cropped, (int(croppedW)+2,int(croppedH)+2), (size[0]/2, size[1]/2))
     # cv2.imwrite("req.png",croppedRotated)
     return croppedRotated
 
-# cv2.imwrite("req.jpeg",crop_contour(required_contour))
+# rect = cv2.minAreaRect(required_contour)
+# box = cv2.boxPoints(rect)
+# box = np.int0(box)
+# cv2.drawContours(clone,[box],0,(0,0,0),2)
+# cv2.imwrite("req2.jpeg",clone)
+# cv2.resize(clone,(500,500))
+# cv2.imshow("frame",clone)
+# cv2.waitKey(0)
+
+# cv2.imwrite("req.jpeg",crop_contour(required_contour,thresh))

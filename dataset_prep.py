@@ -39,11 +39,26 @@ def main():
     with open(file, 'r') as f:
         reader = csv.reader(f, delimiter=",")
         for i in reader:
-            print("check")
+            # print("check")
             filename = i[0]
             x = int(i[1])
             y = int(i[2])
             c.append([filename,x,y])
+    f.close()
+
+    file = 'data1.csv'
+    c = []
+    with open(file, 'r') as f:
+        reader = csv.reader(f, delimiter=",")
+        for i in reader:
+            # print("check")
+            filename = i[0]
+            for j in range(1,len(i)):
+                if j%2==1:
+                    x = int(i[j])
+                else:
+                    y = int(i[j])
+                c.append([filename,x,y])
     f.close()
 
     for i,data in enumerate(c):

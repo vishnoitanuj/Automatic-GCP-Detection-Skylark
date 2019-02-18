@@ -108,7 +108,8 @@ def req_contour(final_lines,x,y):
     # print(final_lines[line][contour])
 
     required_contour = final_lines[line]
-    return required_contour, min(distances)
+    rejected_contours = np.delete(final_lines,line)
+    return required_contour, min(distances), rejected_contours
 
 # required_contour, dist = req_contour(final_lines,704,656)
 # print("req", required_contour)

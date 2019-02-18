@@ -10,20 +10,27 @@ from image_process import (
 import csv
 import os
 import cv2
+import numpy as np
 
 path = os.path.join(os.getcwd(),'Dataset/L')
-# print(path)
+path2 = os.path.join(os.getcwd(),'Dataset/nL')
 
-def make_datatset(filename,x,y,c): 
+d=1
+def make_datatset(filename,x,y,c,d): 
     img = cv2.imread(filename)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     thresh = threshold(img)
     img, lines = find_contours(thresh)
     final_lines = extra_contour_elimination(lines)
-    required_contour, dist = req_contour(final_lines,x,y)
+    required_contour, dist, rejected_contour = req_contour(final_lines,x,y)
     L = crop_contour(required_contour,thresh)
     name=str(c)+'.jpeg'
     cv2.imwrite(os.path.join(path,name),L)
+    for i in range(len(rejected_contour)):
+        nL = crop_contour(rejected_contour[i],thresh)
+        name = str(d)+'.jpeg'
+        cv2.imwrite(os.path.join(path2,name),nL)
+        d+=1
 
 
 file = 'data2.csv'
@@ -38,4 +45,4 @@ with open(file, 'r') as f:
 f.close()
 
 for i,data in enumerate(c):
-    make_datatset(data[0],data[1],data[2],i)
+    make_datatset(data[0],data[1],data[2],i,d)

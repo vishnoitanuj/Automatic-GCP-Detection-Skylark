@@ -3,15 +3,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# filename='ML-Dataset#1/DJI_0096.JPG'
+# filename='ML-Dataset#1/DJI_0500.JPG'
 # img = cv2.imread(filename)
 # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 # clone = img.copy()
 
-def show(img):
-    cv2.resize(img,(500,500))
-    cv2.imshow("frame",img)
-    cv2.waitKey(0)
+# def show(img):
+#     cv2.resize(img,(500,500))
+#     cv2.imshow("frame",img)
+#     cv2.waitKey(0)
 
 
 def morphology(img):
@@ -30,7 +30,7 @@ def threshold(img):
     Range is 200, 255 (hard-coded), can be altered according to dataset
     '''
     gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
-    ret,mask = cv2.threshold(gray,240,255,0)        
+    ret,mask = cv2.threshold(gray,230,255,0)        
     mask = morphology(mask)
     # show(mask)
     return mask
@@ -60,7 +60,7 @@ def extra_contour_elimination(lines):
     contours=[]
     for line in lines:
         a = cv2.contourArea(line)
-        if a>0 and a<=975:          # 65*15=975cm**2 (approximated for pixel)
+        if a>0 and a<=875:          # 65*15=975cm**2 (approximated for pixel)
             contours.append(line)
 
     '''
@@ -112,12 +112,12 @@ def req_contour(final_lines,x,y):
     rejected_contours = np.delete(final_lines,line)
     return required_contour, min(distances), rejected_contours
 
-# required_contour, dist, rejected_contours = req_contour(final_lines,2483,2370)
+# required_contour, dist, rejected_contours = req_contour(lines,2701,1590)
 # print("req", required_contour)
 
 def crop_contour(required_contour,thresh):
     
-    rect = cv2.minAreaRect(required_contour)
+    rect = cv2.minAreaRect(np.array(required_contour))
     box = cv2.boxPoints(rect)
     box = np.int0(box)
     # cv2.drawContours(clone,[box],0,(0,0,255),2)
@@ -157,7 +157,7 @@ def crop_contour(required_contour,thresh):
 # rect = cv2.minAreaRect(required_contour)
 # box = cv2.boxPoints(rect)
 # box = np.int0(box)
-# cv2.drawContours(clone,[box],0,(0,0,0),2)
+# cv2.drawContours(clone,[box],0,(0,0,0),-1)
 # cv2.imwrite("req2.jpeg",clone)
 # cv2.resize(clone,(500,500))
 # cv2.imshow("frame",clone)

@@ -33,16 +33,21 @@ def make_datatset(filename,x,y,c,d):
         d+=1
 
 
-file = 'data2.csv'
-c = []
-with open(file, 'r') as f:
-    reader = csv.reader(f, delimiter=",")
-    for i in reader:
-        filename = i[0]
-        x = int(i[1])
-        y = int(i[2])
-        c.append([filename,x,y])
-f.close()
+def main():
+    file = 'data2.csv'
+    c = []
+    with open(file, 'r') as f:
+        reader = csv.reader(f, delimiter=",")
+        for i in reader:
+            print("check")
+            filename = i[0]
+            x = int(i[1])
+            y = int(i[2])
+            c.append([filename,x,y])
+    f.close()
 
-for i,data in enumerate(c):
-    make_datatset(data[0],data[1],data[2],i,d)
+    for i,data in enumerate(c):
+        make_datatset(data[0],data[1],data[2],i,d)
+
+if __name__ == "__main__":
+    main()

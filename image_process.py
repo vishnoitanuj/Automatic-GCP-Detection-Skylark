@@ -30,7 +30,7 @@ def threshold(img):
     Range is 200, 255 (hard-coded), can be altered according to dataset
     '''
     gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
-    ret,mask = cv2.threshold(gray,230,255,0)        
+    ret,mask = cv2.threshold(gray,200,255,0)        
     mask = morphology(mask)
     # show(mask)
     return mask

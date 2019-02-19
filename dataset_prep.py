@@ -12,11 +12,12 @@ import os
 import cv2
 import numpy as np
 
-path = os.path.join(os.getcwd(),'Dataset/L')
-path2 = os.path.join(os.getcwd(),'Dataset/nL')
+path = os.path.join(os.getcwd(),'data/1')
+path2 = os.path.join(os.getcwd(),'data/0')
 
 d=1
 def make_datatset(filename,x,y,c,d): 
+    print(filename)
     img = cv2.imread(filename)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     thresh = threshold(img)
@@ -25,10 +26,12 @@ def make_datatset(filename,x,y,c,d):
     required_contour, dist, rejected_contour = req_contour(final_lines,x,y)
     L = crop_contour(required_contour,thresh)
     name=str(c)+'.jpeg'
+    L = cv2.resize(L,(28,28))
     cv2.imwrite(os.path.join(path,name),L)
     for i in range(len(rejected_contour)):
         nL = crop_contour(rejected_contour[i],thresh)
         name = str(d)+'.jpeg'
+        nL = cv2.resize(nL,(28,28))
         cv2.imwrite(os.path.join(path2,name),nL)
         d+=1
 
@@ -47,7 +50,6 @@ def main():
     f.close()
 
     file = 'data1.csv'
-    c = []
     with open(file, 'r') as f:
         reader = csv.reader(f, delimiter=",")
         for i in reader:

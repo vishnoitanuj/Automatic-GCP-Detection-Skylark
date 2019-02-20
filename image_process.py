@@ -3,15 +3,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# filename='ML-Dataset#1/DJI_0500.JPG'
+# filename='plot/DJI_0421.JPG'
 # img = cv2.imread(filename)
 # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 # clone = img.copy()
 
-# def show(img):
-#     cv2.resize(img,(500,500))
-#     cv2.imshow("frame",img)
-#     cv2.waitKey(0)
+def show(img):
+    cv2.resize(img,(500,500))
+    cv2.imshow("frame",img)
+    cv2.waitKey(0)
 
 
 def morphology(img):
@@ -30,7 +30,7 @@ def threshold(img):
     Range is 200, 255 (hard-coded), can be altered according to dataset
     '''
     gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
-    ret,mask = cv2.threshold(gray,200,255,0)        
+    ret,mask = cv2.threshold(gray,220,255,0)        
     mask = morphology(mask)
     # show(mask)
     return mask
@@ -50,6 +50,7 @@ def find_contours(img):
     return new_img, contours
 
 # img, lines = find_contours(thresh)
+# img = cv2.GaussianBlur(img,(3,3),0)
 # cv2.imwrite("contours.jpeg",img)
 # print("Total Contours detected: ",len(lines))
 
@@ -68,7 +69,7 @@ def extra_contour_elimination(lines):
     '''
     concave = []
     for line in contours:
-        epsilon = 0.01*cv2.arcLength(line,True)
+        epsilon = 0.05*cv2.arcLength(line,True)
         approx = cv2.approxPolyDP(line,epsilon,True)
         if not cv2.isContourConvex(approx):
             concave.append(line)
@@ -112,8 +113,17 @@ def req_contour(final_lines,x,y):
     rejected_contours = np.delete(final_lines,line)
     return required_contour, min(distances), rejected_contours
 
-# required_contour, dist, rejected_contours = req_contour(lines,2701,1590)
+# required_contour, dist, rejected_contours = req_contour(lines,3880,488)
 # print("req", required_contour)
+
+def get_edges(img):
+    # gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    gray_blur = cv2.GaussianBlur(img,(5,5),0)
+    edges = cv2.Canny(gray_blur, 220,255)
+    return edges
+
+# edges = get_edges(thresh)
+# cv2.imwrite('edges.jpeg',edges)
 
 def crop_contour(required_contour,thresh):
     

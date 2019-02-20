@@ -1,7 +1,21 @@
+import numpy as np
 import cv2
+def draw_circle(event,x,y,flags,param):
+    global mouseX,mouseY
+    if event == cv2.EVENT_LBUTTONDBLCLK:
+        cv2.circle(img,(x,y),100,(255,0,0),-1)
+        mouseX,mouseY = x,y
+        print(x,y)
 
-image = cv2.imread('ML-Dataset#2/M1_F1.3_0402.JPG')
-print(image)
-cv2.rectangle(image,(697,236),(747,272),(0,255,255), 5)
-cv2.imshow("frame",image)
-cv2.waitKey(0)
+filename='contours.jpeg'
+img = cv2.imread(filename)
+cv2.namedWindow('image')
+cv2.setMouseCallback('image',draw_circle)
+
+while(1):
+    cv2.imshow('image',img)
+    k = cv2.waitKey(20) & 0xFF
+    if k == 27:
+        break
+    elif k == ord('a'):
+        print(mouseX,mouseY)

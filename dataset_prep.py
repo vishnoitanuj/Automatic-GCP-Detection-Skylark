@@ -24,7 +24,7 @@ def make_datatset(filename,x,y,c,d):
     img, lines = find_contours(thresh)
     final_lines = extra_contour_elimination(lines)
     required_contour, dist, rejected_contour = req_contour(final_lines,x,y)
-    _,L = crop_contour(required_contour,thresh)
+    L = crop_contour(required_contour,thresh)
     name=str(c)+'.jpeg'
     L = cv2.resize(L,(28,28))
     cv2.imwrite(os.path.join(path,name),L)

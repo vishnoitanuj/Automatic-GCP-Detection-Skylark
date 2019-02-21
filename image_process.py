@@ -144,7 +144,6 @@ def crop_contour(required_contour,thresh):
     x2 = max(Xs)
     y1 = min(Ys)
     y2 = max(Ys)
-    scale = [x1,y1]
 
     angle = rect[2]
     if angle < -45:
@@ -163,7 +162,7 @@ def crop_contour(required_contour,thresh):
     # Final cropped & rotated rectangle
     croppedRotated = cv2.getRectSubPix(cropped, (int(croppedW)+2,int(croppedH)+2), (size[0]/2, size[1]/2))
     # cv2.imwrite("req.png",croppedRotated)
-    return scale,croppedRotated
+    return croppedRotated
 
 # rect = cv2.minAreaRect(required_contour)
 # box = cv2.boxPoints(rect)

@@ -15,8 +15,8 @@ Problem with using object detection: The GCP points are very small and thus, nor
 >* Step 2: Thresholding is followed by morphology. Used opencv function
 
 ~~~~
->* closing = cv2.morphologyEx(img,cv2.MORPH_CLOSE,kernel)       #Dilation: Useful for closing small holes in image in thresh image
->* opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN,kernel)   #Erosion: Useful in noise reduction
+closing = cv2.morphologyEx(img,cv2.MORPH_CLOSE,kernel)       #Dilation: Useful for closing small holes in image in thresh image
+opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN,kernel)   #Erosion: Useful in noise reduction
 ~~~~
 
 >* Step 3: Find contours in the threshold image received from above.

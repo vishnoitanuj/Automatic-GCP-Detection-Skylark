@@ -31,9 +31,7 @@ opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN,kernel)   #Erosion: Useful in
 
 ## Training Module
 <a href='training.ipynb'>Notebook</a>
-The learning model is a Sequential model with 5 convolutional layers build in keras.  To get a single max probability output, softmax is used. The filters kernel size in the convolutional layer are on trial and test basis. The training data has 265 positive samples and 213 negative samples contained in repository 'data/train'. The test samples has 8 samples each of negative and positive L, contained in repository 'data/test'
-    
-The model summary is
+The learning model is a Sequential model with 5 convolutional layers build in keras.  To get a single max probability output, softmax is used. The filters kernel size in the convolutional layer are on trial and test basis. The training data has 265 positive samples and 213 negative samples contained in repository 'data/train'. The test samples has 8 samples each of negative and positive L, contained in repository 'data/test'. The model summary is
 ![model_summary](test_images/model_summary.png)
 
 >* The images tested from <a href='CV-Assignment-Dataset'>CV-Assignment-Dataset</a> are stored with marked detection in <a href='/plot'>plot</a> directory.

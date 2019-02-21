@@ -1,4 +1,4 @@
-import numpy as np
+# import numpy as np
 import cv2
 # def draw_circle(event,x,y,flags,param):
 #     global mouseX,mouseY
@@ -20,7 +20,6 @@ import cv2
 #     elif k == ord('a'):
 #         print(mouseX,mouseY)
 
-img = cv2.imread('plot/DJI_0036.JPG')
-cv2.circle(img,(1721, 2633), 63, (0,0,255), 1)
-
-cv2.imwrite('test_images/point.jpeg',img)
+img = cv2.imread('subpixel5.png')
+cv2.imshow("frame",img)
+cv2.waitKey(0)

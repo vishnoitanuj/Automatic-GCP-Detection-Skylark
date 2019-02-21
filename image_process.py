@@ -61,7 +61,7 @@ def extra_contour_elimination(lines):
     contours=[]
     for line in lines:
         a = cv2.contourArea(line)
-        if a>0 and a<=850:          # 65*15=975cm**2 (approximated for pixel)
+        if a>0 and a<=800:          # 65*15=975cm**2 (approximated for pixel)
             contours.append(line)
 
     '''

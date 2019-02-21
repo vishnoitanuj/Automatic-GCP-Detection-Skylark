@@ -21,5 +21,7 @@ import cv2
 #         print(mouseX,mouseY)
 
 img = cv2.imread('subpixel5.png')
+o_shape = img.shape
+print(o_shape)
 cv2.imshow("frame",img)
 cv2.waitKey(0)

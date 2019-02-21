@@ -8,7 +8,7 @@ Problem with using object detection: The GCP points are very small and thus, nor
 ## Method Employed
 
 <blockqoute>
-    1. [Detection of contours in image](!image_process.py): The contours can be used to detect white "L" shape GCP and crop that from the image for training images.
+    1. [Detection of contours in image](image_process.py): The contours can be used to detect white "L" shape GCP and crop that from the image for training images.
         * Step 1 : Thresholding the RGB image and mask it with (220,255): the white mask. The value range 220-255 can be altered for images (this suited best for dataset provided).
         * Step 2: Thresholding is followed by morphology. Used opencv function
     ~~~

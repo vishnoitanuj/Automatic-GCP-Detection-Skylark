@@ -1,5 +1,7 @@
 # Skylark Drone Assignment: GCP detection in Drone Imagery
 
+### For Full detailed report please refer <a href='#'>[Skylark GCP Report.pdf]</a>
+
 ## Problem statement
 Manual detection of Ground Control Points is a cumbersome task and thus, a Computer Vision and Deep Learning model can help simplify this task by identifying the points and then plotting their co-ordinates.
 
@@ -7,6 +9,7 @@ Problem with using object detection: The GCP points are very small and thus, nor
 
 ## Method Employed
 
+### Pre-process Flowchart refer: <a href=''>pre-process flow chart.pdf</a>
 
 1. <a href='image_process.py'>Detection of contours in image</a>: The contours can be used to detect white "L" shape GCP and crop that from the image for training images.
 
@@ -32,7 +35,7 @@ opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN,kernel)   #Erosion: Useful in
 ## Training Module
 <a href='training.ipynb'>Notebook</a>
 The learning model is a Sequential model with 5 convolutional layers build in keras.  To get a single max probability output, softmax is used. The filters kernel size in the convolutional layer are on trial and test basis. The training data has 286 positive samples and 213 negative samples contained in repository 'data/train'. The test samples has 8 samples each of negative and positive L, contained in repository 'data/test'. The model summary is
-![model_summary](test_images/model_summary.png)
+![model_summary](images/model_summary.png)
 
 >* The images tested from <a href='CV-Assignment-Dataset'>CV-Assignment-Dataset</a> are stored with marked detection in <a href='/plot'>plot</a> directory.
 

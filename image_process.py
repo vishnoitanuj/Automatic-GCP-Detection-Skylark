@@ -3,10 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# filename='plot/DJI_0421.JPG'
-# img = cv2.imread(filename)
-# img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-# clone = img.copy()
 
 def show(img):
     cv2.resize(img,(500,500))
@@ -35,8 +31,7 @@ def threshold(img):
     # show(mask)
     return mask
 
-# thresh = threshold(img)         
-# cv2.imwrite("thresh.jpeg",thresh)
+
 
 '''
 Finding Lines
@@ -49,10 +44,6 @@ def find_contours(img):
 
     return new_img, contours
 
-# img, lines = find_contours(thresh)
-# img = cv2.GaussianBlur(img,(3,3),0)
-# cv2.imwrite("contours.jpeg",img)
-# print("Total Contours detected: ",len(lines))
 
 def extra_contour_elimination(lines):
     '''
@@ -76,9 +67,7 @@ def extra_contour_elimination(lines):
     
     return concave
 
-# final_lines = extra_contour_elimination(lines) 
-# print("Number of contours after elimination: ",len(final_lines))
-# print(final_lines)
+
 
 '''
 Testing for dataset
@@ -86,6 +75,9 @@ Testing for dataset
 
 
 def closest_node(node, nodes):
+    '''
+    Find contours with closest to given data coordinates
+    '''
     nodes = np.asarray(nodes)
     dist_2 = []
     for i in range(len(nodes)):
@@ -96,6 +88,10 @@ def closest_node(node, nodes):
     return min_dist,index[0]
 
 def req_contour(final_lines,x,y):
+
+    '''
+    Return required and rejected contours for dataset preparation
+    '''
     distances=[]
     indexes=[]
     for line in final_lines:
@@ -103,37 +99,29 @@ def req_contour(final_lines,x,y):
         indexes.append(index)
         distances.append(dist)
 
-    # print(min(distances))
-    # print(distances)
     line=distances.index(min(distances))
     contour=indexes[line]
-    # print(final_lines[line][contour])
 
     required_contour = final_lines[line]
     rejected_contours = np.delete(final_lines,line)
     return required_contour, min(distances), rejected_contours
 
-# required_contour, dist, rejected_contours = req_contour(lines,3880,488)
-# print("req", required_contour)
 
 def get_edges(img):
-    # gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    gray_blur = cv2.GaussianBlur(img,(5,5),0)
-    edges = cv2.Canny(gray_blur, 220,255)
+    gray_blur = cv2.GaussianBlur(img,(5,5),0)       #To refine the edge corner
+    edges = cv2.Canny(gray_blur, 220,255)           #Identify edges in contour
     return edges
 
-# edges = get_edges(thresh)
-# cv2.imwrite('edges.jpeg',edges)
 
 def crop_contour(required_contour,thresh):
+
+    '''
+    Crop contour and save to data folder for training
+    '''
     
     rect = cv2.minAreaRect(np.array(required_contour))
     box = cv2.boxPoints(rect)
     box = np.int0(box)
-    # cv2.drawContours(clone,[box],0,(0,0,255),2)
-
-    # new_img = clone[y:y+h,x:x+h]
-    # print(new_img)
 
     W = rect[1][0]
     H = rect[1][1]
@@ -163,14 +151,3 @@ def crop_contour(required_contour,thresh):
     croppedRotated = cv2.getRectSubPix(cropped, (int(croppedW)+2,int(croppedH)+2), (size[0]/2, size[1]/2))
     # cv2.imwrite("req.png",croppedRotated)
     return croppedRotated
-
-# rect = cv2.minAreaRect(required_contour)
-# box = cv2.boxPoints(rect)
-# box = np.int0(box)
-# cv2.drawContours(clone,[box],0,(0,0,0),-1)
-# cv2.imwrite("req2.jpeg",clone)
-# cv2.resize(clone,(500,500))
-# cv2.imshow("frame",clone)
-# cv2.waitKey(0)
-
-# cv2.imwrite("req.jpeg",crop_contour(required_contour,thresh))

@@ -1,7 +1,7 @@
 # Skylark Drone Assignment: GCP detection in Drone Imagery
 
 ## Problem statement
-Manual detection of Ground Control Points is a cubersome task and thus, a Computer Vision and Deep Learning model can help simplify this task by identifying the points and then plotting their co-ordinates.
+Manual detection of Ground Control Points is a cumbersome task and thus, a Computer Vision and Deep Learning model can help simplify this task by identifying the points and then plotting their co-ordinates.
 
 Problem with using object detection: The GCP points are very small and thus, normal object detection algorithms could not be applied. There is scope of applying <strong>RetinaNet model</strong>, but that has led to bad accuracy, and great computation since it uses detection and here the method can be optimised using <strong>classification</strong> instead. (Classifying whether it is a GCP(1) or not(0)).
 
@@ -31,7 +31,7 @@ opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN,kernel)   #Erosion: Useful in
 
 ## Training Module
 <a href='training.ipynb'>Notebook</a>
-The learning model is a Sequential model with 5 convolutional layers build in keras.  To get a single max probability output, softmax is used. The filters kernel size in the convolutional layer are on trial and test basis. The training data has 265 positive samples and 213 negative samples contained in repository 'data/train'. The test samples has 8 samples each of negative and positive L, contained in repository 'data/test'. The model summary is
+The learning model is a Sequential model with 5 convolutional layers build in keras.  To get a single max probability output, softmax is used. The filters kernel size in the convolutional layer are on trial and test basis. The training data has 286 positive samples and 213 negative samples contained in repository 'data/train'. The test samples has 8 samples each of negative and positive L, contained in repository 'data/test'. The model summary is
 ![model_summary](test_images/model_summary.png)
 
 >* The images tested from <a href='CV-Assignment-Dataset'>CV-Assignment-Dataset</a> are stored with marked detection in <a href='/plot'>plot</a> directory.
@@ -47,6 +47,7 @@ The learning model is a Sequential model with 5 convolutional layers build in ke
 >* The segregated contours are then passed to model for prediction of required shape.
 >* The minAreaRect function gives box co-ordinates of the prediction in the threshold image.
 >* Detect <strong>Harris Corners</strong> in the predicted contour and eliminate all corners that lie beyond the boundaries of the above calculated box.
+>* The Harris corner points are dilated and then passed to a cv2.cornerSubPix() function to get corners with Sub Pixel Accuracy (Source: <a href='https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_features_harris/py_features_harris.html'>Link</a>)
 >* Calculate <strong>Center of Mass of the predicted contour</strong>, since the  required point is always close to COM.
 >* Calculate the corner (detected from Harris) closest to COM, that's the required co-ordinates.
 >* Encapsulate the image name and coordinates to <a href='output.csv'>output.csv</a> file.

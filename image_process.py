@@ -149,5 +149,4 @@ def crop_contour(required_contour,thresh):
     croppedH = H if H < W else W
     # Final cropped & rotated rectangle
     croppedRotated = cv2.getRectSubPix(cropped, (int(croppedW)+2,int(croppedH)+2), (size[0]/2, size[1]/2))
-    # cv2.imwrite("req.png",croppedRotated)
     return croppedRotated

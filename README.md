@@ -1,6 +1,6 @@
 # Skylark Drone Assignment: GCP detection in Drone Imagery
 
-### For Full detailed report please refer <a href='#'>[Skylark GCP Report.pdf]</a>
+### For Full detailed report please refer <a href='https://github.com/vishnoitanuj/Skylark-GCP-Assignment/blob/master/Skylark%20GCP%20Report.pdf'>[Skylark GCP Report.pdf]</a>
 
 ## Problem statement
 Manual detection of Ground Control Points is a cumbersome task and thus, a Computer Vision and Deep Learning model can help simplify this task by identifying the points and then plotting their co-ordinates.
@@ -9,7 +9,7 @@ Problem with using object detection: The GCP points are very small and thus, nor
 
 ## Method Employed
 
-### Pre-process Flowchart refer: <a href=''>pre-process flow chart.pdf</a>
+### Pre-process Flowchart refer: <a href='https://github.com/vishnoitanuj/Skylark-GCP-Assignment/blob/master/pre-process%20flow%20chart.pdf'>pre-process flow chart.pdf</a>
 
 1. <a href='image_process.py'>Detection of contours in image</a>: The contours can be used to detect white "L" shape GCP and crop that from the image for training images.
 
